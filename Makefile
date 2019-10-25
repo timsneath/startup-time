@@ -1,4 +1,5 @@
-COMPILED_LANGS := C C++ Cython Cython3 D Go Go_GCC Haskell OCaml Pascal Rust
+# COMPILED_LANGS := C C++ Cython Cython3 D Go Go_GCC Haskell OCaml Pascal Rust
+COMPILED_LANGS := C C++ Cython3 Dart D Go Go_GCC Haskell OCaml Pascal Rust
 INTERPRETED_LANGS := Bash CShell Lua Perl PHP Python-S Python Python3-S Python3 PyPy Ruby Shell ZShell
 
 Bash_EXT := bash
@@ -21,6 +22,7 @@ Csharp_COMPILER := mcs
 Cython_COMPILER := cython
 Cython3_COMPILER := cython3
 MONO := $(shell which mono)
+Dart_COMPILER := dart2native
 D_COMPILER := gdc
 Go_COMPILER := go
 Go_GCC_COMPILER := gccgo
@@ -39,6 +41,7 @@ CShell_VERSION = $(shell dpkg-query --showformat='$${Version}' --show csh | sed 
 Cython_VERSION = $(shell $(Cython_COMPILER) --version 2>&1 | head -n 1 | cut -d " " -f 3)
 Cython3_VERSION = $(shell $(Cython3_COMPILER) --version 2>&1 | head -n 1 | cut -d " " -f 3)
 D_VERSION = $(shell $(D_COMPILER) --version | head -n 1 | cut -d " " -f 4)
+Dart_VERSION = $(shell dart --version 2>&1 | cut -d " " -f 4)
 Go_VERSION = $(shell $(Go_COMPILER) version | head -n 1 | cut -d " " -f 3)
 Go_GCC_VERSION = $(shell $(Go_GCC_COMPILER) --version | head -n 1 | cut -d " " -f 4)
 Haskell_VERSION = $(shell $(Haskell_COMPILER) --version | head -n 1 | cut -d " " -f 8)
@@ -83,8 +86,7 @@ PASCAL_FLAGS ?= -O3
 PACKAGES := \
 	bash \
 	csh \
-	cython \
-	cython3 \
+	dart \
 	default-jdk \
 	fp-compiler \
 	gcc \
@@ -145,6 +147,9 @@ C++: hello-world.cpp
 
 D: $(wildcard *.d)
 	$(D_COMPILER) $(DFLAGS) -o $@ $^
+
+Dart: hello-world.dart
+	$(Dart_COMPILER) -o $@ $^
 
 Go: hello-world.go
 	$(Go_COMPILER) build -o $@ $^
